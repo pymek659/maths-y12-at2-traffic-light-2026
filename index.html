@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maths Advanced — Topic Checklist</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0f13;
+    --surface: #17171e;
+    --border: #2a2a35;
+    --text: #e8e8f0;
+    --muted: #6b6b80;
+    --red: #ff4d4d;
+    --amber: #ffb020;
+    --green: #22c55e;
+    --red-dim: rgba(255,77,77,0.15);
+    --amber-dim: rgba(255,176,32,0.15);
+    --green-dim: rgba(34,197,94,0.15);
+    --accent: #7c6fff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Mono', monospace;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 40px 20px 80px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  header h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 800;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, #fff 40%, var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  header p {
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  .legend {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 48px;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .dot.red { background: var(--red); box-shadow: 0 0 8px var(--red); }
+  .dot.amber { background: var(--amber); box-shadow: 0 0 8px var(--amber); }
+  .dot.green { background: var(--green); box-shadow: 0 0 8px var(--green); }
+
+  .module-block {
+    max-width: 780px;
+    margin: 0 auto 48px;
+  }
+
+  .module-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    padding: 0 0 12px 4px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 4px;
+  }
+
+  .week-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 18px 4px 6px;
+  }
+
+  .topic-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 6px;
+    background: var(--surface);
+    transition: border-color 0.2s, background 0.2s;
+    cursor: default;
+  }
+
+  .topic-row:hover {
+    border-color: var(--accent);
+  }
+
+  .topic-row.state-red {
+    border-color: var(--red);
+    background: var(--red-dim);
+  }
+
+  .topic-row.state-amber {
+    border-color: var(--amber);
+    background: var(--amber-dim);
+  }
+
+  .topic-row.state-green {
+    border-color: var(--green);
+    background: var(--green-dim);
+  }
+
+  .topic-label {
+    flex: 1;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--text);
+  }
+
+  .topic-label .lesson-num {
+    font-size: 10px;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 2px;
+    letter-spacing: 0.1em;
+  }
+
+  .traffic-lights {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .tl-btn {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+    opacity: 0.3;
+    background: transparent;
+    position: relative;
+  }
+
+  .tl-btn:hover {
+    transform: scale(1.2);
+    opacity: 0.7;
+  }
+
+  .tl-btn.active {
+    opacity: 1;
+  }
+
+  .tl-btn.red-btn {
+    background: var(--red);
+    border-color: var(--red);
+  }
+
+  .tl-btn.red-btn.active {
+    box-shadow: 0 0 12px var(--red), 0 0 24px rgba(255,77,77,0.4);
+  }
+
+  .tl-btn.amber-btn {
+    background: var(--amber);
+    border-color: var(--amber);
+  }
+
+  .tl-btn.amber-btn.active {
+    box-shadow: 0 0 12px var(--amber), 0 0 24px rgba(255,176,32,0.4);
+  }
+
+  .tl-btn.green-btn {
+    background: var(--green);
+    border-color: var(--green);
+  }
+
+  .tl-btn.green-btn.active {
+    box-shadow: 0 0 12px var(--green), 0 0 24px rgba(34,197,94,0.4);
+  }
+
+  .progress-bar-wrap {
+    max-width: 780px;
+    margin: 0 auto 48px;
+  }
+
+  .progress-bar-wrap h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .progress-segments {
+    display: flex;
+    height: 10px;
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--border);
+    gap: 2px;
+  }
+
+  .seg {
+    height: 100%;
+    transition: width 0.4s ease;
+  }
+
+  .seg.red-seg { background: var(--red); }
+  .seg.amber-seg { background: var(--amber); }
+  .seg.green-seg { background: var(--green); }
+
+  .progress-counts {
+    display: flex;
+    gap: 20px;
+    margin-top: 10px;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .count-red { color: var(--red); }
+  .count-amber { color: var(--amber); }
+  .count-green { color: var(--green); }
+
+  .reset-btn {
+    display: block;
+    margin: 0 auto;
+    padding: 10px 28px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .reset-btn:hover {
+    border-color: var(--accent);
+    color: var(--text);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Maths Advanced AT 2</h1>
+  <p>MODULE 3 & 4 — TOPIC CONFIDENCE TRACKER</p>
+</header>
+
+<div class="legend">
+  <div class="legend-item"><span class="dot red"></span> Not confident</div>
+  <div class="legend-item"><span class="dot amber"></span> Partially understand</div>
+  <div class="legend-item"><span class="dot green"></span> Fully confident</div>
+</div>
+
+<div class="progress-bar-wrap">
+  <h2>Overall Progress</h2>
+  <div class="progress-segments">
+    <div class="seg green-seg" id="seg-green" style="width:0%"></div>
+    <div class="seg amber-seg" id="seg-amber" style="width:0%"></div>
+    <div class="seg red-seg" id="seg-red" style="width:0%"></div>
+  </div>
+  <div class="progress-counts">
+    <span class="count-green" id="count-green">0 confident</span>
+    <span class="count-amber" id="count-amber">0 partial</span>
+    <span class="count-red" id="count-red">0 not confident</span>
+  </div>
+</div>
+
+<div id="checklist"></div>
+
+<button class="reset-btn" onclick="resetAll()">Reset All</button>
+
+<script>
+const data = [
+  {
+    module: "Module 3 — Applications of Differentiation",
+    weeks: [
+      {
+        label: null,
+        topics: [
+          { id: "m3l1", lesson: "Lesson 1", title: "Increasing, decreasing and stationary at a point" },
+          { id: "m3l2a", lesson: "Lesson 2 (Part 1)", title: "Stationary points and turning points" },
+          { id: "m3l2b", lesson: "Lesson 2 (Part 2)", title: "Some less familiar curves (Enrichment)" },
+          { id: "m3l3", lesson: "Lesson 3", title: "Second and higher derivatives" },
+          { id: "m3l4", lesson: "Lesson 4", title: "Concavity and points of inflection" },
+        ]
+      },
+      {
+        label: "Term 1 — Week 1",
+        topics: [
+          { id: "m3l5", lesson: "Lesson 5", title: "Systematic curve sketching with the derivative" },
+          { id: "m3l6", lesson: "Lesson 6", title: "Global maximum and minimum" },
+          { id: "m3l7", lesson: "Lesson 7", title: "Applications of maximisation and minimisation" },
+        ]
+      },
+      {
+        label: "Term 1 — Week 2",
+        topics: [
+          { id: "m3l8", lesson: "Lesson 8", title: "Primitive functions" },
+          { id: "m3l9", lesson: "Lesson 9", title: "Chapter review" },
+        ]
+      },
+    ]
+  },
+  {
+    module: "Module 4 — Integration",
+    weeks: [
+      {
+        label: "Term 1 — Week 2 (cont.)",
+        topics: [
+          { id: "m4l1", lesson: "Lesson 1", title: "Areas and the definite integral" },
+        ]
+      },
+      {
+        label: "Term 1 — Week 3",
+        topics: [
+          { id: "m4l2", lesson: "Lesson 2", title: "The fundamental theorem of calculus" },
+          { id: "m4l3", lesson: "Lesson 3", title: "The definite integral and its properties" },
+          { id: "m4l4", lesson: "Lesson 4", title: "Challenge — proving the fundamental theorem" },
+        ]
+      },
+      {
+        label: "Term 1 — Week 4",
+        topics: [
+          { id: "m4l5", lesson: "Lesson 5", title: "The indefinite integral" },
+          { id: "m4l6", lesson: "Lesson 6", title: "Finding areas by integration" },
+          { id: "m4l7", lesson: "Lesson 7", title: "Areas of compound regions" },
+        ]
+      },
+      {
+        label: "Term 1 — Week 5",
+        topics: [
+          { id: "m4l8", lesson: "Lesson 8", title: "The trapezoidal rule" },
+          { id: "m4l9", lesson: "Lesson 9", title: "The reverse chain rule" },
+          { id: "m4l10", lesson: "Lesson 10", title: "Chapter review" },
+        ]
+      },
+    ]
+  }
+];
+
+const states = {};
+
+function loadStates() {
+  try {
+    const saved = localStorage.getItem('maths_tl_states');
+    if (saved) Object.assign(states, JSON.parse(saved));
+  } catch(e) {}
+}
+
+function saveStates() {
+  try { localStorage.setItem('maths_tl_states', JSON.stringify(states)); } catch(e) {}
+}
+
+function setState(id, color) {
+  if (states[id] === color) {
+    delete states[id];
+  } else {
+    states[id] = color;
+  }
+  saveStates();
+  renderRow(id);
+  updateProgress();
+}
+
+function renderRow(id) {
+  const row = document.getElementById('row-' + id);
+  if (!row) return;
+  row.className = 'topic-row' + (states[id] ? ' state-' + states[id] : '');
+  ['red','amber','green'].forEach(c => {
+    const btn = row.querySelector('.tl-btn.' + c + '-btn');
+    if (btn) btn.classList.toggle('active', states[id] === c);
+  });
+}
+
+function updateProgress() {
+  const all = Object.values(states);
+  const total = document.querySelectorAll('.topic-row').length;
+  const r = all.filter(s => s === 'red').length;
+  const a = all.filter(s => s === 'amber').length;
+  const g = all.filter(s => s === 'green').length;
+
+  document.getElementById('seg-green').style.width = (g / total * 100) + '%';
+  document.getElementById('seg-amber').style.width = (a / total * 100) + '%';
+  document.getElementById('seg-red').style.width = (r / total * 100) + '%';
+
+  document.getElementById('count-green').textContent = g + ' confident';
+  document.getElementById('count-amber').textContent = a + ' partial';
+  document.getElementById('count-red').textContent = r + ' not confident';
+}
+
+function resetAll() {
+  for (const k in states) delete states[k];
+  saveStates();
+  document.querySelectorAll('.topic-row').forEach(row => {
+    row.className = 'topic-row';
+    row.querySelectorAll('.tl-btn').forEach(btn => btn.classList.remove('active'));
+  });
+  updateProgress();
+}
+
+function buildChecklist() {
+  loadStates();
+  const container = document.getElementById('checklist');
+
+  data.forEach(mod => {
+    const block = document.createElement('div');
+    block.className = 'module-block';
+
+    const title = document.createElement('div');
+    title.className = 'module-title';
+    title.textContent = mod.module;
+    block.appendChild(title);
+
+    mod.weeks.forEach(week => {
+      if (week.label) {
+        const wl = document.createElement('div');
+        wl.className = 'week-label';
+        wl.textContent = week.label;
+        block.appendChild(wl);
+      }
+
+      week.topics.forEach(topic => {
+        const row = document.createElement('div');
+        row.className = 'topic-row' + (states[topic.id] ? ' state-' + states[topic.id] : '');
+        row.id = 'row-' + topic.id;
+
+        const label = document.createElement('div');
+        label.className = 'topic-label';
+        label.innerHTML = `<span class="lesson-num">${topic.lesson.toUpperCase()}</span>${topic.title}`;
+
+        const lights = document.createElement('div');
+        lights.className = 'traffic-lights';
+
+        ['red','amber','green'].forEach(c => {
+          const btn = document.createElement('button');
+          btn.className = 'tl-btn ' + c + '-btn';
+          btn.title = c === 'red' ? 'Not confident' : c === 'amber' ? 'Partially understand' : 'Fully confident';
+          if (states[topic.id] === c) btn.classList.add('active');
+          btn.onclick = () => setState(topic.id, c);
+          lights.appendChild(btn);
+        });
+
+        row.appendChild(label);
+        row.appendChild(lights);
+        block.appendChild(row);
+      });
+    });
+
+    container.appendChild(block);
+  });
+
+  updateProgress();
+}
+
+buildChecklist();
+</script>
+</body>
+</html>
